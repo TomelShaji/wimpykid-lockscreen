@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Operation: Doomsday - Survival Journal Lock Screen</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts for Hand-drawn Journal Look -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Gochi+Hand&family=Patrick+Hand&family=Permanent+Marker&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Custom Notebook Styling */
+    .font-hand { font-family: 'Patrick Hand', 'Gochi Hand', cursive; }
+    .font-marker { font-family: 'Permanent Marker', cursive; }
+    .font-caveat { font-family: 'Caveat', cursive; }
+    .font-kalam { font-family: 'Kalam', cursive; }
+
+    /* Lined Notebook Paper Pattern */
+    .notebook-paper {
+      background-color: #f7f4ea;
+      background-image: 
+        linear-gradient(90deg, transparent 49px, #ff8b8b 49px, #ff8b8b 51px, transparent 51px),
+        linear-gradient(#d0d7de 1px, transparent 1px);
+      background-size: 100% 100%, 100% 1.75rem;
+      background-position: 0 0, 0 0.4rem;
+      background-attachment: local;
+    }
+
+    /* Hand-drawn style borders and rotations */
+    .sketch-border {
+      border: 2px solid #1e2229;
+      border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+    }
+    
+    .sketch-box {
+      border: 2px solid #2b2d42;
+      box-shadow: 2px 3px 0px #1e2229;
+    }
+
+    .rotate-nagative-1 { transform: rotate(-1.2deg); }
+    .rotate-positive-1 { transform: rotate(1.5deg); }
+    .rotate-nagative-2 { transform: rotate(-2.5deg); }
+
+    /* Custom Checkbox */
+    .hand-checkbox {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      border: 2.5px solid #1e2229;
+      border-radius: 4px;
+      outline: none;
+      cursor: pointer;
+      position: relative;
+      background: rgba(255,255,255,0.6);
+      transition: all 0.2s ease;
+    }
+    .hand-checkbox:checked {
+      background-color: transparent;
+    }
+    .hand-checkbox:checked::after {
+      content: '✓';
+      position: absolute;
+      top: -6px;
+      left: 2px;
+      font-size: 22px;
+      font-weight: bold;
+      color: #1d4ed8;
+      font-family: 'Permanent Marker', cursive;
+    }
+
+    /* Pencil Strikethrough Effect */
+    .strikethrough {
+      position: relative;
+      color: #6b7280;
+    }
+    .strikethrough::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 55%;
+      width: 100%;
+      height: 3px;
+      background: #1d4ed8;
+      opacity: 0.75;
+      transform: rotate(-1deg);
+      border-radius: 2px;
+    }
+
+    /* Subtle Pulsing for Urgency */
+    @keyframes pulse-subtle {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(1.02); }
+    }
+    .urgent-pulse {
+      animation: pulse-subtle 2s infinite ease-in-out;
+    }
+
+    /* Custom Scrollbar for list */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-800 font-hand antialiased min-h-screen flex items-center justify-center p-2 sm:p-4 select-none">
+
+  <!-- Mobile Frame Container -->
+  <div class="w-full max-w-sm sm:max-w-md h-[92vh] max-h-[850px] bg-[#111827] rounded-[48px] p-3 shadow-2xl border-4 border-slate-700 relative overflow-hidden flex flex-col justify-between">
+    
+    <!-- Phone Top Hardware Notch / Dynamic Island -->
+    <div class="absolute top-4 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-full z-50 flex items-center justify-end px-2">
+      <div class="w-2.5 h-2.5 rounded-full bg-slate-900 border border-slate-700"></div>
+    </div>
+
+    <!-- Phone Screen Area -->
+    <div class="notebook-paper w-full h-full rounded-[36px] overflow-hidden flex flex-col pt-7 pb-4 px-4 relative border border-amber-100/30">
+      
+      <!-- OS Status Bar (Top Header) -->
+      <div class="w-full flex justify-between items-center text-xs font-sans text-slate-600 px-2 pt-1 font-semibold z-20">
+        <span id="current-time-clock">10:09</span>
+        <div class="flex items-center gap-1.5">
+          <!-- Signal Icon -->
+          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.41.41-.41 1.07 0 1.48.41.41 1.07.41 1.48 0l1.79-1.79C9.16 19.64 10.53 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg>
+          <!-- Wifi Icon -->
+          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"/></svg>
+          <!-- Battery Icon -->
+          <div class="w-5 h-2.5 border border-slate-600 rounded-sm p-0.5 flex items-center">
+            <div class="bg-slate-700 h-full w-4/5 rounded-xs"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Journal Title & Subhead -->
+      <div class="mt-2 text-center pl-6">
+        <p id="lock-date" class="text-xs uppercase tracking-wider text-slate-500 font-sans font-bold">Tuesday, Nov 23</p>
+        <h1 class="font-marker text-2xl sm:text-3xl text-blue-900 tracking-wide rotate-nagative-1 uppercase leading-none mt-1">
+          OPERATION: DOOMSDAY
+        </h1>
+        <p class="font-caveat text-sm text-red-600 font-bold tracking-wider -mt-0.5">(OR ELSE SURVIVAL PLAN)</p>
+      </div>
+
+      <!-- Countdown Display Section -->
+      <div class="mt-3 pl-6 pr-2 flex items-center justify-between gap-2">
+        
+        <!-- Timer Box -->
+        <div class="flex-1 bg-amber-50/80 p-2 sketch-box rounded-lg border-2 border-slate-800 text-center rotate-nagative-1">
+          <div class="grid grid-cols-4 gap-1 text-slate-900">
+            <div>
+              <span id="timer-days" class="font-marker text-2xl sm:text-3xl block leading-none">00</span>
+              <span class="text-[10px] uppercase font-sans tracking-tight font-bold text-slate-500">Days</span>
+            </div>
+            <div>
+              <span id="timer-hours" class="font-marker text-2xl sm:text-3xl block leading-none text-red-600">00</span>
+              <span class="text-[10px] uppercase font-sans tracking-tight font-bold text-slate-500">Hrs</span>
+            </div>
+            <div>
+              <span id="timer-mins" class="font-marker text-2xl sm:text-3xl block leading-none">00</span>
+              <span class="text-[10px] uppercase font-sans tracking-tight font-bold text-slate-500">Mins</span>
+            </div>
+            <div>
+              <span id="timer-secs" class="font-marker text-2xl sm:text-3xl block leading-none text-blue-700">00</span>
+              <span class="text-[10px] uppercase font-sans tracking-tight font-bold text-slate-500">Secs</span>
+            </div>
+          </div>
+          <div class="mt-1 pt-1 border-t border-dashed border-slate-400 flex items-center justify-between text-[11px] font-kalam text-slate-700">
+            <span>Target: Nov 23</span>
+            <span id="time-status-tag" class="text-red-600 font-bold">T-MINUS CRITICAL</span>
+          </div>
+        </div>
+
+        <!-- Dynamic Hand-Drawn Doodle & Speech Bubble -->
+        <div class="w-24 flex flex-col items-center justify-center relative">
+          <!-- Speech Bubble -->
+          <div class="bg-white p-1.5 rounded-xl border-2 border-slate-800 text-[11px] font-kalam leading-tight text-center sketch-box mb-1 z-10 w-full relative">
+            <span id="doodle-speech">I might actually finish!</span>
+            <!-- Bubble Arrow -->
+            <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-8 border-t-slate-800"></div>
+          </div>
+
+          <!-- SVG Wimpy Stick Figure Character -->
+          <svg id="stick-figure-svg" class="w-16 h-16 text-slate-900" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Head -->
+            <circle cx="50" cy="30" r="18" fill="white" />
+            <!-- Eyes -->
+            <circle id="eye-left" cx="43" cy="26" r="2" fill="currentColor" />
+            <circle id="eye-right" cx="55" cy="26" r="2" fill="currentColor" />
+            <!-- Sweat Drop (Toggleable) -->
+            <path id="sweat-drop" d="M 64 18 Q 67 23 64 26 Q 61 23 64 18 Z" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1"/>
+            <!-- Mouth (Dynamic) -->
+            <path id="doodle-mouth" d="M 42 36 Q 50 42 56 36" />
+            <!-- Hair Lines -->
+            <path d="M 46 12 Q 44 6 42 4" />
+            <path d="M 50 12 Q 50 5 50 2" />
+            <path d="M 54 12 Q 56 6 58 4" />
+            <!-- Body -->
+            <path d="M 50 48 L 50 78" />
+            <!-- Left Arm (Writing) -->
+            <path id="arm-left" d="M 50 54 L 32 64 L 20 58" />
+            <!-- Right Arm (Panicking / Holding Pencil) -->
+            <path id="arm-right" d="M 50 54 L 68 62 L 78 50" />
+            <!-- Legs -->
+            <path d="M 50 78 L 38 96" />
+            <path d="M 50 78 L 62 96" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Milestone Plan Header & Progress Bar -->
+      <div class="mt-4 pl-6 pr-2">
+        <div class="flex items-center justify-between text-slate-800 mb-1">
+          <h2 class="font-marker text-lg tracking-wide uppercase text-slate-900">
+            MARVEL MARATHON PLAN:
+          </h2>
+          <span id="progress-text" class="font-kalam font-bold text-sm bg-yellow-200 px-1.5 py-0.5 rounded border border-slate-700 rotate-positive-1">
+            0/5 DONE
+          </span>
+        </div>
+
+        <!-- Custom Hand-Drawn Progress Bar -->
+        <div class="w-full h-3.5 bg-white border-2 border-slate-800 rounded-full overflow-hidden p-0.5 sketch-box">
+          <div id="progress-bar-inner" class="h-full bg-blue-600 rounded-full transition-all duration-500 ease-out" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- Scrollable Checklist Container -->
+      <div class="mt-3 pl-6 pr-1 flex-1 overflow-y-auto max-h-[300px]">
+        <ul id="milestone-list" class="space-y-2 text-base sm:text-lg">
+          <!-- Checklist Items rendered via JS -->
+        </ul>
+      </div>
+
+      <!-- Add Custom Milestone Input Field -->
+      <div class="mt-2 pl-6 pr-2">
+        <form id="add-milestone-form" class="flex items-center gap-2">
+          <input 
+            type="text" 
+            id="new-milestone-input"
+            placeholder="+ Add urgent milestone..." 
+            class="flex-1 bg-white/90 border-2 border-slate-800 rounded-lg px-2.5 py-1 text-sm font-hand focus:outline-none focus:ring-2 focus:ring-blue-500 sketch-box placeholder:text-slate-400"
+            maxlength="45"
+            required
+          >
+          <button 
+            type="submit" 
+            class="bg-yellow-300 hover:bg-yellow-400 active:scale-95 text-slate-900 font-marker text-sm px-3 py-1 rounded-lg border-2 border-slate-800 sketch-box transition-transform"
+          >
+            ADD
+          </button>
+        </form>
+      </div>
+
+      <!-- Footer / Note Margin Comment -->
+      <div class="mt-3 pl-6 pr-2 pt-2 border-t border-slate-300 flex items-center justify-between text-xs font-kalam text-slate-600">
+        <span class="italic text-red-600 font-bold">* Coffee supply critical. Send snacks.</span>
+        
+        <!-- Sound Effect Toggle Button -->
+        <button id="sound-toggle" class="flex items-center gap-1 bg-slate-200 hover:bg-slate-300 px-2 py-0.5 rounded border border-slate-700 text-[10px] font-sans font-bold">
+          <span id="sound-icon">🔊</span> SOUND ON
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Phone Bottom Home Indicator Bar -->
+    <div class="w-32 h-1 bg-slate-500 rounded-full mx-auto my-1"></div>
+  </div>
+
+  <!-- JavaScript App Logic -->
+  <script>
+    // State Management
+    const TARGET_DATE = new Date('2026-11-23T00:00:00').getTime();
+    
+    let milestones = [
+      { id: 1, text: "Pretend I understand the Multiverse", done: true },
+      { id: 2, text: "Watch Iron Man (so I know where it started)", done: true },
+      { id: 3, text: "Figure out who these variants are", done: false, active: true },
+      { id: 4, text: "Cram 15 Phase 4 & 5 series in one night", done: false },
+      { id: 5, text: "Sit in theater & nod wisely when everyone cheers", done: false }
+    ];
+
+    let soundEnabled = true;
+
+    // Web Audio API for simple pencil/check sound effects (No external asset dependency)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    function playScratchSound() {
+      if (!soundEnabled) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.08);
+      } catch (e) { console.log(e); }
+    }
+
+    // DOM Elements
+    const listEl = document.getElementById('milestone-list');
+    const formEl = document.getElementById('add-milestone-form');
+    const inputEl = document.getElementById('new-milestone-input');
+    const progressTextEl = document.getElementById('progress-text');
+    const progressBarInner = document.getElementById('progress-bar-inner');
+    const speechEl = document.getElementById('doodle-speech');
+    const mouthEl = document.getElementById('doodle-mouth');
+    const sweatEl = document.getElementById('sweat-drop');
+    const soundBtn = document.getElementById('sound-toggle');
+    const soundIcon = document.getElementById('sound-icon');
+
+    // Update Real-time Clock
+    function updateLiveClock() {
+      const now = new Date();
+      const hrs = String(now.getHours()).padStart(2, '0');
+      const mins = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('current-time-clock').textContent = `${hrs}:${mins}`;
+    }
+    setInterval(updateLiveClock, 1000);
+    updateLiveClock();
+
+    // Countdown Timer Calculation
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = TARGET_DATE - now;
+
+      if (distance < 0) {
+        document.getElementById('timer-days').textContent = '00';
+        document.getElementById('timer-hours').textContent = '00';
+        document.getElementById('timer-mins').textContent = '00';
+        document.getElementById('timer-secs').textContent = '00';
+        document.getElementById('time-status-tag').textContent = "EVENT STARTED!";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById('timer-days').textContent = String(days).padStart(2, '0');
+      document.getElementById('timer-hours').textContent = String(hours).padStart(2, '0');
+      document.getElementById('timer-mins').textContent = String(minutes).padStart(2, '0');
+      document.getElementById('timer-secs').textContent = String(seconds).padStart(2, '0');
+
+      // Update urgency state
+      if (days < 3) {
+        document.getElementById('time-status-tag').textContent = "PANIC MODE!";
+        document.getElementById('time-status-tag').classList.add('urgent-pulse');
+      }
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // Render Milestone Checklist
+    function renderMilestones() {
+      listEl.innerHTML = '';
+      let completedCount = 0;
+
+      milestones.forEach((item) => {
+        if (item.done) completedCount++;
+
+        const li = document.createElement('li');
+        li.className = `flex items-start justify-between gap-2 p-1.5 rounded-lg transition-all ${
+          item.active && !item.done ? 'bg-yellow-200/60 border border-yellow-400 rotate-nagative-1' : ''
+        }`;
+
+        li.innerHTML = `
+          <label class="flex items-start gap-2.5 cursor-pointer flex-1">
+            <input 
+              type="checkbox" 
+              class="hand-checkbox mt-0.5" 
+              ${item.done ? 'checked' : ''} 
+              onchange="toggleMilestone(${item.id})"
+            >
+            <span class="leading-tight ${item.done ? 'strikethrough' : 'text-slate-900 font-medium'}">
+              ${escapeHtml(item.text)}
+            </span>
+          </label>
+          <button 
+            onclick="deleteMilestone(${item.id})" 
+            class="text-xs text-red-500 hover:text-red-700 font-sans px-1 font-bold opacity-40 hover:opacity-100"
+            title="Delete task"
+          >
+            ✕
+          </button>
+        `;
+        listEl.appendChild(li);
+      });
+
+      // Update Progress Summary
+      const total = milestones.length;
+      const percentage = total === 0 ? 0 : Math.round((completedCount / total) * 100);
+      
+      progressTextEl.textContent = `${completedCount}/${total} DONE`;
+      progressBarInner.style.width = `${percentage}%`;
+
+      // Update Character Expression & Speech Bubble
+      updateCharacterMood(completedCount, total);
+    }
+
+    // Toggle Checkbox Action
+    window.toggleMilestone = function(id) {
+      playScratchSound();
+      milestones = milestones.map(m => {
+        if (m.id === id) {
+          return { ...m, done: !m.done, active: false };
+        }
+        return m;
+      });
+      renderMilestones();
+    };
+
+    // Delete Milestone Action
+    window.deleteMilestone = function(id) {
+      milestones = milestones.filter(m => m.id !== id);
+      renderMilestones();
+    };
+
+    // Add New Milestone Form Handler
+    formEl.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const text = inputEl.value.trim();
+      if (!text) return;
+
+      playScratchSound();
+      milestones.push({
+        id: Date.now(),
+        text: text,
+        done: false
+      });
+
+      inputEl.value = '';
+      renderMilestones();
+    });
+
+    // Update Doodle Character Facial Expression & Speech
+    function updateCharacterMood(completed, total) {
+      if (total === 0) {
+        speechEl.textContent = "Add a milestone!";
+        mouthEl.setAttribute('d', 'M 42 36 L 56 36'); // Flat mouth
+        sweatEl.style.display = 'none';
+        return;
+      }
+
+      const ratio = completed / total;
+
+      if (ratio === 1) {
+        speechEl.textContent = "WE SURVIVED! 🎉";
+        mouthEl.setAttribute('d', 'M 40 32 Q 49 46 58 32 Z'); // Big happy smile
+        sweatEl.style.display = 'none';
+      } else if (ratio >= 0.6) {
+        speechEl.textContent = "I might actually finish!";
+        mouthEl.setAttribute('d', 'M 42 34 Q 49 42 56 34'); // Slight smile
+        sweatEl.style.display = 'block';
+      } else if (ratio >= 0.3) {
+        speechEl.textContent = "Coffee running out...";
+        mouthEl.setAttribute('d', 'M 42 36 L 56 36'); // Nervous line mouth
+        sweatEl.style.display = 'block';
+      } else {
+        speechEl.textContent = "PANIC MODE!! 😱";
+        mouthEl.setAttribute('d', 'M 42 40 Q 49 32 56 40'); // Sad/panicked frown
+        sweatEl.style.display = 'block';
+      }
+    }
+
+    // Toggle Sound Button
+    soundBtn.addEventListener('click', () => {
+      soundEnabled = !soundEnabled;
+      soundIcon.textContent = soundEnabled ? '🔊' : '🔇';
+      soundBtn.classList.toggle('opacity-50', !soundEnabled);
+    });
+
+    // Helper to sanitize text
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, function(m) {
+        return {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#039;'
+        }[m];
+      });
+    }
+
+    // Initialize Render
+    renderMilestones();
+  </script>
+</body>
+</html>
